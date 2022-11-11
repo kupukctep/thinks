@@ -15,7 +15,8 @@ pipeline {
             steps {
                 echo " ======= start building image ======="
                 dir ('docker/toolbox') {
-                    sh 'docker build . '
+                    sh 'ls'
+//                    sh 'docker build . '
                 }
             }
         }
