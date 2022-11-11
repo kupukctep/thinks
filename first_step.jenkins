@@ -1,15 +1,22 @@
 #!groovy
+// Check ub1 properties
+properties([disableConcurrentBuilds()])
+
 pipeline {
-    agent none
+    agent {
+        label 'master'
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        timestamps()
+    }
     stages {
-        stage('Maven Install') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                }
-            }
+        stage("First step") {
             steps {
-                sh 'mvn clean install'
+                echo " ======= start building image ======="
+                dir ('docker/toolbox') {
+                    sh 'docker build . '
+                }
             }
         }
     }
