@@ -1,19 +1,24 @@
 #!groovy
+// Check ub1 properties
+properties([disableConcurrentBuilds()])
 
-properties([disableCuncurrentBuilds()])
-
-piplene {
+pipeline {
     agent {
         label 'master'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        timestamp()
+        timestamps()
     }
-    stages{
+    stages {
         stage("First step") {
             steps {
-                echo " ======= start building image ======="
+                sh 'ssh root@ub1 \'hostname\''
+            }
+        }
+        stage("Second step") {
+            steps {
+                sh 'ssh root@ub1 \'uptime\''
             }
         }
     }
