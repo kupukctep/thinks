@@ -1,22 +1,39 @@
-#!groovy
-// Check ub1 properties
-properties([disableConcurrentBuilds()])
+//#!groovy
+//// Check ub1 properties
+//properties([disableConcurrentBuilds()])
+//
+//pipeline {
+//    agent {
+//        label 'master'
+//    }
+//    options {
+//        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+//        timestamps()
+//    }
+//    stages {
+//        stage("First step") {
+//            steps {
+//                echo " ======= start building image ======="
+//                dir ('docker/toolbox') {
+//                    sh 'docker build . '
+//                }
+//            }
+//        }
+//    }
+//}
 
+#!groovy
 pipeline {
-    agent {
-        label 'master'
-    }
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        timestamps()
-    }
+    agent none
     stages {
-        stage("First step") {
-            steps {
-                echo " ======= start building image ======="
-                dir ('docker/toolbox') {
-                    sh 'docker build . '
+        stage('Maven Install') {
+            agent {
+                docker {
+                    image 'maven:3.5.0'
                 }
+            }
+            steps {
+                sh 'mvn clean install'
             }
         }
     }
